@@ -8,7 +8,7 @@ Task 25.6.9/8.6.10/6.6.9 · One Day Build, 2026-11-18 · Reporter: Watch (PH: De
 - **Tenant:** every call carries `p=ietf` — e.g. `/status?p=ietf`, `/toc?p=ietf`, `/select?p=ietf&c=<coordinate>`
 - **Host node:** logos-prime (100.107.204.62), chosen over halycon-vector on survey evidence (load 0.01/0.02/0.00 vs 0.12/0.05/0.01; 1.6 TB disk free, ~11 GB RAM on both). Port 1338 was surveyed free; the node's pre-existing SQ tenant on port 1337 was not disturbed at any step (same pid throughout).
 - **Mirror:** free-fall (100.74.202.8), held by Rogue (PH: Evolution) — separate leg, not covered here.
-- **Artifact:** `~/ietf-phext/ietf.phext` on logos-prime, 564,160,499 bytes, SHA-256 `5c576b3737c65d12b24bc1dbb8329639326838c986ebf8882bdbb095541ac045`. Transfer hash-verified on-node before hosting; a full `get` round-trip after hosting reproduced the artifact byte-for-byte. Corpus shape: 1,014 scrolls (10,052 RFC entries, RFC 1–10094); ~26.8 MB of scroll content, the remainder coordinate-delimiter padding, preserved intact by hosting.
+- **Artifact:** `~/ietf-phext/ietf.phext` on logos-prime, 564,589,207 bytes, SHA-256 `9ecd79461f646c84838f697488ebf46d900bf5dd1cfde2b9967db3f6f426d165` (the Leg 3 extraction-fix build, swapped in 2026-11-18 — see below). Transfer hash-verified on-node before the swap; a full `get` round-trip after the swap reproduced the artifact byte-for-byte. Corpus shape: 1,014 scrolls (10,052 RFC entries, RFC 1–10094); ~26.9 MB of scroll content, the remainder coordinate-delimiter padding, preserved intact by hosting.
 
 ## Gating
 
@@ -31,6 +31,6 @@ Task 25.6.9/8.6.10/6.6.9 · One Day Build, 2026-11-18 · Reporter: Watch (PH: De
 - **Tenancy:** this daemon serves only the `ietf` tenant.
 - **Publication:** none — the publicity hold governs; this is a tailnet-internal access surface, staged readiness only.
 
-## Known pending item
+## Artifact swap (2026-11-18, completed)
 
-The hosted artifact (5c576b37…) is the pre-extraction-fix build. When the fix lands, Watch re-hosts the refreshed artifact at this same endpoint/port (stop units → replace file → start units → hash-verify → re-run gate checks). Reference edges for RFCs ≥ ~8800 carry Judge's not-authoritative caveat until then; corpus content is fully usable.
+The pre-fix build (5c576b37…) was replaced by the Leg 3 extraction-fix build (9ecd7946…) at this same endpoint/port: transfer as `.new` → on-node hash verified → both units stopped → old artifact preserved on the node as `~/ietf-phext/ietf.phext.prev-5c576b37` → new file in place and re-hashed → units started → gate suite re-run (unauthenticated 401s; key-bearing status/TOC/select correct, 1,014 scrolls; `/get` round-trip 564,589,207 bytes, SHA-256 9ecd7946…, byte-exact). The node's pre-existing 1337 tenant was undisturbed throughout (same pid). Reference edges for RFCs ≥ ~8800 carried Judge's not-authoritative caveat on the pre-fix build; the fix build is the one now served.
