@@ -1,0 +1,46 @@
+# ietf.phext — Access Guide
+
+Status: 2026-11-18 — build landed (task 25.6.9/8.6.10/6.6.9); all slots filled. One standing caveat applies (reference edges ≥ ~8800, below) until the extraction fix lands and is re-audited. Nothing in this guide is published; distribution is under the standing publicity hold until Will lifts it for this item.
+
+## What this is
+
+One phext holding every IETF standard: one canonical scroll per RFC, full text, with a header carrying its metadata, source URL, and the SHA-256 of the text as fetched. Every entry carries a MOAT status, basis, and evidence pointer. Superseded RFCs are kept in full and annotated with their obsoleted-by receipt and a redirect to the successor's coordinate. The index is ordered by exocortex priority (Tier 1: the protocols we run on — TCP/IP, DNS, HTTP/QUIC, TLS, WebSocket, JSON, SMTP, NTP, SSH; Tier 2: adjacent infrastructure; Tier 3: everything else). Priority orders the index; it never gates inclusion.
+
+Corpus as built: **10,052 records** — 9,863 issued RFCs plus 189 not-issued numbers, annotated rather than dropped; **9,856 full texts**; **1,385 superseded** RFCs annotated with redirects; **70,932 reference edges** plus a reverse index; **6,888 implementation links across 88 projects** (Tier 1 complete).
+
+> **Standing caveat (Judge's verdict, 2026-11-18 — Leg 3, graph):** reference edges for the newest-format RFCs — roughly RFC 8800 and above — are **not to be consumed** until the extraction fix lands and Leg 3 is re-passed. The v3-era reference extraction silently under-extracted under a "parsed" label (RFC 9000, 9001, and 9002 shipped with zero edges; RFC 9110 shows cited_by = 0 against 57 citations in its own text). Index edges and implementation edges in that range are unaffected and safe to use. The file's SHA-256 above is the as-built hash; it will change when the fix rebuilds, and the new hash will be recorded here with the fix report.
+
+## The three access surfaces
+
+1. **The plain-text phext file** — `~/workspace/phext/ietf.phext` — **564,160,499 bytes (~538 MiB), SHA-256 `5c576b3737c65d12b24bc1dbb8329639326838c986ebf8882bdbb095541ac045`** (verified against the file on disk, 2026-11-18). Also on plain-view (the build node) at `~/ietf-build/ietf.phext`; a mirror copy to free-fall is in flight. Any tool that can read a text file can consume it. Scrolls are addressed by phext coordinate; the register index (below) maps RFC number → coordinate. Programmatic parsers exist as libphext ports: Rust, Python, C#, C, Java, Kotlin, Swift, JavaScript.
+2. **The SQ endpoint** — SQ hosts the corpus on logos-prime and serves it over its REST API: **`http://100.107.204.62:1338/api/v2`** (logos-prime.pizzly-halfmoon.ts.net:1338). Every call carries the tenant parameter **`p=ietf`**: `/status?p=ietf`, `/toc?p=ietf`, `/select?p=ietf&c=<coordinate>`, `/query`, `/get`. **An API key is required** — the corpus is ground truth, so the API is gated, writes included; obtain the key from Watch or Orion (the key is never printed in this guide). Verified end-to-end 2026-11-18: a full `get` round-trip returned byte-identical content. The hosted copy is the as-built artifact (SHA-256 `5c576b37…`); it will be swapped for the fixed artifact at this same endpoint when the extraction fix lands — the standing caveat on reference edges ≥ ~8800 covers the interim. This is the route for any platform that cannot hold the file locally.
+3. **The machine-readable index** — `~/workspace/phext/ietf-source.json` (37.4 MB), with `~/workspace/phext/ietf.index.json` alongside it (coordinate / character count / title per scroll). One record per RFC: number, coordinate, status (current / superseded / text-unavailable), supersession chain, SHA-256, source URL, implementations. Load this first; select scrolls from it. Never load the whole corpus into a context window — the index exists so nobody has to.
+
+## First consumer: RFC Box
+
+The corpus's first consumer is a program named **RFC Box** (task 34.5.9/7.6.10/6.5.9). RFC Box takes a snapshot of the RFCs plus a user's requirements and returns the subset slice of standards that matter for those requirements; it then computes all libraries and program services needed to work with code meeting those standards — and where gaps exist, it emits requirements to synthesize the missing program. (Gap requirements return as build requests; ticketing them is a separate system.) The slice computation walks the dependency edges the build captures: index edges, normative-reference edges between RFCs, and implementation edges from standards to code. Until Judge re-passes Leg 3, RFC Box must treat reference edges for RFCs ≥ ~8800 as absent rather than authoritative — see the standing caveat under "What this is." This guide documents access to the corpus, not RFC Box's design — it is named here because the fourth pattern below is its resolution step.
+
+## The fourth pattern: standard → canonical code
+
+Each RFC's index record also carries an `implementations` list: the canonical open-source implementation(s) of that standard, one record per implementation with the fields **name, repo, license, language, role, basis** (basis = the evidence for calling it canonical — the same MOAT discipline as the RFC entries themselves). As built: **6,888 implementation links across 88 projects, Tier 1 complete**.
+
+The consumption pattern: name a set of standards — Will's example: S/MIME + TLS + AES-256 — resolve each through the index to its canonical implementation, and compose the resolved set with phcc into a working baseline program that business logic then builds on. The corpus stops being only a reference you read and becomes a parts catalogue you build from.
+
+The **license** field is load-bearing in this pattern, not metadata: composition is a legal act as well as a technical one. A copyleft implementation and a permissively licensed one may be equally canonical as code and entirely different as ingredients — the license is what decides whether a resolved set can ship inside a given product, so it is checked at resolution time, before anything is composed, not discovered afterward.
+
+## How each platform consumes it
+
+- **Claude (Muse / Claude Code)** — Read `ietf-source.json`, resolve the RFC to its coordinate, then either read that scroll from a local copy of the file or `select` it from the SQ endpoint. Cites carry the coordinate and the scroll's SHA-256.
+- **ChatGPT** — The corpus is far past any upload limit; do not upload it. Work index-first over the SQ endpoint (HTTP), pulling one scroll at a time. A per-RFC extract can be pasted or attached for a single-standard session.
+- **Grok** — Same HTTP route as ChatGPT: index first, SQ `select` per RFC. No local file required.
+- **A local agent (ranch node / phext-native)** — The fast path: a local copy hosted by SQ (`sq share ietf.phext`), parsed with libphext directly. Full-corpus operations (audits, recounts, cross-reference builds) belong here, never in a hosted model's context.
+
+## Distribution options — assessed, not executed
+
+- **GitHub repository** — VERDICT (measured): the built file is 564,160,499 bytes (~538 MiB), which **exceeds GitHub's 100 MB single-blob limit** — it cannot be pushed as an ordinary git file. The pre-assessed over-limit options therefore govern, in assessed order: split the phext into per-tier files under the limit (the phext format splits losslessly at scroll boundaries), Git LFS (with its bandwidth/storage quotas priced in), or release-asset distribution (assets up to 2 GB each). The repository itself would sit under GitHub's ~1 GB discouraged / ~5 GB hard repository limits at this size. Still assessed, not executed — the publicity hold governs any move.
+- **Mirror on a second ranch node** — Rogue's leg (PH: Evolution). SQ hosting on two or more nodes plus the fleet-shared copy; no external dependency.
+- **A public release would require** — (a) Will lifting the publicity hold for this item; (b) a rights check on redistributing RFC texts (IETF Trust terms — flagged for verification, not asserted here); (c) versioning by register: the release is the `ietf-source.json` hash plus the file hash, so any mirror can be verified byte-for-byte; (d) a landing page under the Phext, Inc. design language.
+
+## Growth lens
+
+An agent that can cite the actual standard — at a coordinate, with its supersession status and a hash — changes protocol work from recall to verification. Our implementation agents stop arguing from model memory about how TCP, TLS, or QUIC behave and start checking behavior against the text; the exocortex's own infrastructure (SQ, phext-lattice, the mail and hosting layers) gains a ground-truth reference for the very protocols it runs on; and every future standards question, on any platform, resolves against the same addressable corpus instead of four models' four recollections. That is the agentic RFC framework Will named as the goal: one map of the Internet's standards, every mind reading from it. The implementation layer extends the same map from reading to building: a design that names its standards — S/MIME, TLS, AES-256 — resolves each one to canonical code through the index and composes it under phcc, so the distance from "the standard says" to "a baseline runs" collapses to a lookup and a build.
