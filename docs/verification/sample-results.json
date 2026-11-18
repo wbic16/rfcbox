@@ -1,0 +1,272 @@
+[
+ {
+  "rfc": 1,
+  "verdict": "PASS",
+  "recorded": "a61eb4ac9d40ac189b17214417ae6d29d4edabd86cadd31f44728faed3e600c0",
+  "refetched": "a61eb4ac9d40ac189b17214417ae6d29d4edabd86cadd31f44728faed3e600c0",
+  "recorded_bytes": 21088,
+  "refetched_bytes": 21088,
+  "http": 200,
+  "recorded_status": "ok"
+ },
+ {
+  "rfc": 202,
+  "verdict": "PASS",
+  "recorded": "2b39b7aa521609d56a9492f2119ce9a02bd32a4118dddfd8449ac3501ded35d0",
+  "refetched": "2b39b7aa521609d56a9492f2119ce9a02bd32a4118dddfd8449ac3501ded35d0",
+  "recorded_bytes": 2796,
+  "refetched_bytes": 2796,
+  "http": 200,
+  "recorded_status": "ok"
+ },
+ {
+  "rfc": 604,
+  "verdict": "PASS",
+  "recorded": "1485a3510e032bfd762a86d790a58c19f6c3f38263e2fbeafba5e3213adce9ab",
+  "refetched": "1485a3510e032bfd762a86d790a58c19f6c3f38263e2fbeafba5e3213adce9ab",
+  "recorded_bytes": 2758,
+  "refetched_bytes": 2758,
+  "http": 200,
+  "recorded_status": "ok"
+ },
+ {
+  "rfc": 1006,
+  "verdict": "PASS",
+  "recorded": "855adb9556880a3c71fb24c79f174026e763ff02b1ec19d7248a5a2005883f53",
+  "refetched": "855adb9556880a3c71fb24c79f174026e763ff02b1ec19d7248a5a2005883f53",
+  "recorded_bytes": 30798,
+  "refetched_bytes": 30798,
+  "http": 200,
+  "recorded_status": "ok"
+ },
+ {
+  "rfc": 1408,
+  "verdict": "PASS",
+  "recorded": "374b0334dd58529760f52f773c7ca3d10177a2d93f5806261f510e919f75b6e5",
+  "refetched": "374b0334dd58529760f52f773c7ca3d10177a2d93f5806261f510e919f75b6e5",
+  "recorded_bytes": 13936,
+  "refetched_bytes": 13936,
+  "http": 200,
+  "recorded_status": "ok"
+ },
+ {
+  "rfc": 1810,
+  "verdict": "PASS",
+  "recorded": "633a876676a5a6316d7e034e6538623416e72aa05067d0df8f57c62977b34fe1",
+  "refetched": "633a876676a5a6316d7e034e6538623416e72aa05067d0df8f57c62977b34fe1",
+  "recorded_bytes": 16607,
+  "refetched_bytes": 16607,
+  "http": 200,
+  "recorded_status": "ok"
+ },
+ {
+  "rfc": 2212,
+  "verdict": "PASS",
+  "recorded": "e3930fa93494b09a8e5645e5d51b5f3be0a702a56b9eb32729d2259a3e03d023",
+  "refetched": "e3930fa93494b09a8e5645e5d51b5f3be0a702a56b9eb32729d2259a3e03d023",
+  "recorded_bytes": 52330,
+  "refetched_bytes": 52330,
+  "http": 200,
+  "recorded_status": "ok"
+ },
+ {
+  "rfc": 2614,
+  "verdict": "PASS",
+  "recorded": "8e6103cca00c2747e6079bb36506752980b479af9392ade9718267435da9f589",
+  "refetched": "8e6103cca00c2747e6079bb36506752980b479af9392ade9718267435da9f589",
+  "recorded_bytes": 164002,
+  "refetched_bytes": 164002,
+  "http": 200,
+  "recorded_status": "ok"
+ },
+ {
+  "rfc": 3016,
+  "verdict": "PASS",
+  "recorded": "7ad5db851b4784e47c06690fed0eead70c721ce79d6d98ee227c11592941d0cb",
+  "refetched": "7ad5db851b4784e47c06690fed0eead70c721ce79d6d98ee227c11592941d0cb",
+  "recorded_bytes": 47070,
+  "refetched_bytes": 47070,
+  "http": 200,
+  "recorded_status": "ok"
+ },
+ {
+  "rfc": 3418,
+  "verdict": "PASS",
+  "recorded": "7f3313e0581b841e25ed6785f97d392e2718c51a137018e9e8c8773df20895bf",
+  "refetched": "7f3313e0581b841e25ed6785f97d392e2718c51a137018e9e8c8773df20895bf",
+  "recorded_bytes": 49096,
+  "refetched_bytes": 49096,
+  "http": 200,
+  "recorded_status": "ok"
+ },
+ {
+  "rfc": 3820,
+  "verdict": "PASS",
+  "recorded": "4a41b3624516675cd50d8a13d616e5289655851bf7912591bb9d2563f0caba40",
+  "refetched": "4a41b3624516675cd50d8a13d616e5289655851bf7912591bb9d2563f0caba40",
+  "recorded_bytes": 86374,
+  "refetched_bytes": 86374,
+  "http": 200,
+  "recorded_status": "ok"
+ },
+ {
+  "rfc": 4222,
+  "verdict": "PASS",
+  "recorded": "f956dd810faf3fc12cc809d318c5039c6e68883a8db2f2ca1b985aeb74f89011",
+  "refetched": "f956dd810faf3fc12cc809d318c5039c6e68883a8db2f2ca1b985aeb74f89011",
+  "recorded_bytes": 34132,
+  "refetched_bytes": 34132,
+  "http": 200,
+  "recorded_status": "ok"
+ },
+ {
+  "rfc": 4624,
+  "verdict": "PASS",
+  "recorded": "c203bafed33f3495e0ca6ad011c64923f73d11ab4957f8f45acb643cfa0ff80f",
+  "refetched": "c203bafed33f3495e0ca6ad011c64923f73d11ab4957f8f45acb643cfa0ff80f",
+  "recorded_bytes": 58759,
+  "refetched_bytes": 58759,
+  "http": 200,
+  "recorded_status": "ok"
+ },
+ {
+  "rfc": 5026,
+  "verdict": "PASS",
+  "recorded": "537fb2ec7804325e3c31926efa2d2f83771e7289407f8ca9ce278a042feebb00",
+  "refetched": "537fb2ec7804325e3c31926efa2d2f83771e7289407f8ca9ce278a042feebb00",
+  "recorded_bytes": 63138,
+  "refetched_bytes": 63138,
+  "http": 200,
+  "recorded_status": "ok"
+ },
+ {
+  "rfc": 5429,
+  "verdict": "PASS",
+  "recorded": "65018bfee062e39baf291c44c61484ad5e45051363e276d7cca87925d2d6ef86",
+  "refetched": "65018bfee062e39baf291c44c61484ad5e45051363e276d7cca87925d2d6ef86",
+  "recorded_bytes": 28822,
+  "refetched_bytes": 28822,
+  "http": 200,
+  "recorded_status": "ok"
+ },
+ {
+  "rfc": 5831,
+  "verdict": "PASS",
+  "recorded": "76631c870cd1afa5fe4986245336f99628e0a4ad7096fe5a928eea128a5bb587",
+  "refetched": "76631c870cd1afa5fe4986245336f99628e0a4ad7096fe5a928eea128a5bb587",
+  "recorded_bytes": 25844,
+  "refetched_bytes": 25844,
+  "http": 200,
+  "recorded_status": "ok"
+ },
+ {
+  "rfc": 6233,
+  "verdict": "PASS",
+  "recorded": "e4f12160edf31c7c630b50ddad5d6fdb730835ff72b4b5f3bda31182af770d46",
+  "refetched": "e4f12160edf31c7c630b50ddad5d6fdb730835ff72b4b5f3bda31182af770d46",
+  "recorded_bytes": 8435,
+  "refetched_bytes": 8435,
+  "http": 200,
+  "recorded_status": "ok"
+ },
+ {
+  "rfc": 6635,
+  "verdict": "PASS",
+  "recorded": "7607a61dc2606075f70130b7357ebd6d6aa7ce0b801c6cf7464f4fb4ef40e62b",
+  "refetched": "7607a61dc2606075f70130b7357ebd6d6aa7ce0b801c6cf7464f4fb4ef40e62b",
+  "recorded_bytes": 48170,
+  "refetched_bytes": 48170,
+  "http": 200,
+  "recorded_status": "ok"
+ },
+ {
+  "rfc": 7037,
+  "verdict": "PASS",
+  "recorded": "a2f2f2609c0ca9006ea35f4cfb2e9be774833a55d342ad8c37e5f6392d84f50e",
+  "refetched": "a2f2f2609c0ca9006ea35f4cfb2e9be774833a55d342ad8c37e5f6392d84f50e",
+  "recorded_bytes": 23356,
+  "refetched_bytes": 23356,
+  "http": 200,
+  "recorded_status": "ok"
+ },
+ {
+  "rfc": 7439,
+  "verdict": "PASS",
+  "recorded": "97702188e6c22d679461ebcd8fad3b8260c03b190a84e7fc56acad4049331565",
+  "refetched": "97702188e6c22d679461ebcd8fad3b8260c03b190a84e7fc56acad4049331565",
+  "recorded_bytes": 64087,
+  "refetched_bytes": 64087,
+  "http": 200,
+  "recorded_status": "ok"
+ },
+ {
+  "rfc": 7841,
+  "verdict": "PASS",
+  "recorded": "9d5e0b45a7a3fe095ceec5e05a228dd990553374d99ff9fb622cc77bbd9e5e9f",
+  "refetched": "9d5e0b45a7a3fe095ceec5e05a228dd990553374d99ff9fb622cc77bbd9e5e9f",
+  "recorded_bytes": 27950,
+  "refetched_bytes": 27950,
+  "http": 200,
+  "recorded_status": "ok"
+ },
+ {
+  "rfc": 8243,
+  "verdict": "PASS",
+  "recorded": "544e0fb878e50ef97ee6b2173b80d614a2c5a93c1a6ab9eda99dd4f847319e35",
+  "refetched": "544e0fb878e50ef97ee6b2173b80d614a2c5a93c1a6ab9eda99dd4f847319e35",
+  "recorded_bytes": 66920,
+  "refetched_bytes": 66920,
+  "http": 200,
+  "recorded_status": "ok"
+ },
+ {
+  "rfc": 8645,
+  "verdict": "PASS",
+  "recorded": "08bad083c340eaff1072f16b0f5f57cda8a5e832ad8b1cd8efa5467e837feb38",
+  "refetched": "08bad083c340eaff1072f16b0f5f57cda8a5e832ad8b1cd8efa5467e837feb38",
+  "recorded_bytes": 141580,
+  "refetched_bytes": 141580,
+  "http": 200,
+  "recorded_status": "ok"
+ },
+ {
+  "rfc": 9047,
+  "verdict": "PASS",
+  "recorded": "6d7d03d16d40ec1866b7003700eb2de0cd27c6ac1f5ad7219d9de205cc1cd67c",
+  "refetched": "6d7d03d16d40ec1866b7003700eb2de0cd27c6ac1f5ad7219d9de205cc1cd67c",
+  "recorded_bytes": 23784,
+  "refetched_bytes": 23784,
+  "http": 200,
+  "recorded_status": "ok"
+ },
+ {
+  "rfc": 9449,
+  "verdict": "PASS",
+  "recorded": "3842c58e1f6043389416023b9bb8d765048266024982fbbd90640e05943f4e13",
+  "refetched": "3842c58e1f6043389416023b9bb8d765048266024982fbbd90640e05943f4e13",
+  "recorded_bytes": 92478,
+  "refetched_bytes": 92478,
+  "http": 200,
+  "recorded_status": "ok"
+ },
+ {
+  "rfc": 9854,
+  "verdict": "PASS",
+  "recorded": "bd6d2677288292987d8f88373651adbb177422449dab990ac80764a34771f4b1",
+  "refetched": "bd6d2677288292987d8f88373651adbb177422449dab990ac80764a34771f4b1",
+  "recorded_bytes": 81807,
+  "refetched_bytes": 81807,
+  "http": 200,
+  "recorded_status": "ok"
+ },
+ {
+  "rfc": 10094,
+  "verdict": "PASS",
+  "recorded": "8e8e038340b186281cf794b7060e469d09655ea2294b12c8c8604e42fc69f200",
+  "refetched": "8e8e038340b186281cf794b7060e469d09655ea2294b12c8c8604e42fc69f200",
+  "recorded_bytes": 15086,
+  "refetched_bytes": 15086,
+  "http": 200,
+  "recorded_status": "ok"
+ }
+]
