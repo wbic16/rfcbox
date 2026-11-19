@@ -1,5 +1,7 @@
 # Offers — ietf.phext and RFC Box
 
+> **SUPERSEDED (Will, 2026-11-18): we are not selling RFC Box.** Everything we build serves the Exocortex of 2130 and is intrinsically MIT licensed. No offer in this document is operative; it is retained as the record of the assessment that preceded the ruling.
+
 Internal document, Phext, Inc. Revenue division, 2026-11-18. Offers assessed, not launched. The standing publicity hold governs anything external; no offer in this document is live, and none may be represented as live. Every price is a hypothesis, anchored to a cited market source where an anchor exists. Phext, Inc. facts used in the arithmetic: burn ≈ $5,000/year, revenue $0 to date, no funding. House frame ("Fill the Piggy Bank"): at $5K/year spend the operation moves at pre-AGI funding rates because knowledge work is automated, so $1 of earned revenue ≈ $20,000 of capability. That multiplier is a house frame, not a market claim, and appears only in the internal arithmetic below.
 
 ## Serving cost — what every offer shares

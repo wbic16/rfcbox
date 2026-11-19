@@ -1,5 +1,7 @@
 # Positioning — ietf.phext and RFC Box
 
+> **Ruling (Will, 2026-11-18): we are not selling RFC Box.** Everything we build serves the Exocortex of 2130 and is intrinsically MIT licensed. The buyer/segment framing below is superseded; the verified facts and the rights analysis stand. The artifact's value is capability for the Exocortex of 2130.
+
 Internal document, Phext, Inc. Revenue division, 2026-11-18. Draft under the standing publicity hold: nothing here is published, sent, or announced. Every number is either a verified fact about the artifact (marked as such), a cited market source, or labelled a hypothesis. Where we do not know, this document says Unknown.
 
 ## The artifact, in verified facts
