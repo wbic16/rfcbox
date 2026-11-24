@@ -4,6 +4,7 @@
 //!   search (§8) · subset (§5) · refresh (§4)
 //!   baseline (§9.1) · diff (§9.2) · freeze/thaw (§9.3) · export (§9.5)
 //!   core · show — inspect the shipped baseline and its receipts
+//!   install — deploy the §4 refresh run as a systemd service (root)
 //!
 //! Nothing here is an IETF or RFC Editor product; the corpus is a
 //! third-party structure over IETF material (§2).
@@ -78,6 +79,7 @@ fn run(argv: &[String]) -> Result<()> {
         "freeze" => cmd_freeze(&root, true),
         "thaw" => cmd_freeze(&root, false),
         "export" => cmd_export(&root),
+        "install" => cmd_install(rest),
         other => Err(Error::Usage(format!("unknown command {other} (try: rfcbox help)"))),
     }
 }
@@ -106,7 +108,10 @@ fn print_help() {
          \x20 baseline NAME · diff A [B] · freeze · thaw · export\n\
          shipped baseline:\n\
          \x20 core                     list the baseline core with its audit receipts\n\
-         \x20 show N                   print RFC N's verbatim text (core or your set), hash-verified first"
+         \x20 show N                   print RFC N's verbatim text (core or your set), hash-verified first\n\
+         deployment:\n\
+         \x20 install --corpus PHEXT [--name rfcbox] [--dir DIR] [--user U] [--enable] [--start] [--dry-run]\n\
+         \x20                          deploy the refresh run as a systemd service (root; --dry-run prints the unit)"
     );
 }
 
@@ -1162,5 +1167,101 @@ fn cmd_export(root: &PathBuf) -> Result<()> {
     let path = project.reports_dir().join(format!("export-{today}.md"));
     std::fs::write(&path, &out)?;
     println!("export written to {}", path.display());
+    Ok(())
+}
+
+// ---------- install (systemd deployment) ----------
+
+/// Deploy the §4 refresh run as a systemd service. rfcbox has no
+/// daemon — every command is a single run — so the service-shaped
+/// invocation is the corpus-maintenance run itself: `refresh`
+/// against the corpus this host keeps current. Rendering is pure
+/// (rfcbox::install); this function is the side-effecting shell:
+/// --dry-run (or a non-root run) prints the unit, and only root
+/// writes it. Nothing is enabled or started unless flagged.
+fn cmd_install(rest: &[String]) -> Result<()> {
+    use rfcbox::install::{render_unit, running_as_root, unit_path, validate_unit_name, InstallConfig};
+    let name = opt_value(rest, "--name").unwrap_or_else(|| "rfcbox".into());
+    validate_unit_name(&name)?;
+    let corpus = opt_value(rest, "--corpus").ok_or_else(|| {
+        Error::Usage(
+            "install needs --corpus IETF.PHEXT — the corpus the deployed refresh service maintains (§4)"
+                .into(),
+        )
+    })?;
+    let dir = match opt_value(rest, "--dir") {
+        Some(d) => PathBuf::from(d),
+        None => std::env::current_dir()?,
+    };
+    let dir = if dir.is_absolute() {
+        dir
+    } else {
+        std::env::current_dir()?.join(dir)
+    };
+    let user = opt_value(rest, "--user");
+    let enable = rest.iter().any(|a| a == "--enable");
+    let start = rest.iter().any(|a| a == "--start");
+    let dry_run = rest.iter().any(|a| a == "--dry-run");
+    let exec = std::env::current_exe()?;
+    let cfg = InstallConfig {
+        name: name.clone(),
+        exec: exec.clone(),
+        corpus: corpus.clone(),
+        dir,
+        user: user.clone(),
+    };
+    let unit = render_unit(&cfg);
+    if dry_run {
+        print!("{unit}");
+        return Ok(());
+    }
+    if !running_as_root() {
+        print!("{unit}");
+        let mut sudo = format!(
+            "sudo {} install --name {name} --corpus {corpus} --dir {}",
+            exec.display(),
+            cfg.dir.display()
+        );
+        if let Some(u) = &user {
+            sudo.push_str(&format!(" --user {u}"));
+        }
+        if enable {
+            sudo.push_str(" --enable");
+        }
+        if start {
+            sudo.push_str(" --start");
+        }
+        eprintln!("install: not running as root — the unit above was NOT written.");
+        eprintln!("deploy it with: {sudo}");
+        return Err(Error::Usage("install requires root".into()));
+    }
+    let path = unit_path(&name);
+    std::fs::write(&path, &unit)?;
+    println!("wrote {}", path.display());
+    run_systemctl(&["daemon-reload"])?;
+    println!("systemctl daemon-reload: ok");
+    if enable {
+        run_systemctl(&["enable", &name])?;
+        println!("systemctl enable {name}: ok");
+    }
+    if start {
+        run_systemctl(&["start", &name])?;
+        println!("systemctl start {name}: ok");
+    }
+    if !enable && !start {
+        println!("not enabled or started (pass --enable / --start, or: systemctl enable --now {name})");
+    }
+    Ok(())
+}
+
+fn run_systemctl(args: &[&str]) -> Result<()> {
+    let out = std::process::Command::new("systemctl").args(args).output()?;
+    if !out.status.success() {
+        return Err(Error::Other(format!(
+            "systemctl {} failed: {}",
+            args.join(" "),
+            String::from_utf8_lossy(&out.stderr).trim()
+        )));
+    }
     Ok(())
 }

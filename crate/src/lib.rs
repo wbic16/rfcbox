@@ -11,6 +11,7 @@
 
 pub mod audit;
 pub mod fetch;
+pub mod install;
 pub mod manifest;
 pub mod payload;
 pub mod project;
