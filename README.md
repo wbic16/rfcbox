@@ -1,24 +1,107 @@
-# RFC Box
+# rfcbox
 
-One of the first multiversal effects we implement. **ietf.phext is the first phext in its data model.**
+A Rust builder/reader library plus CLI over **ietf.phext** — the phext corpus
+that holds every IETF RFC in one coordinate space (10,052 records: 9,863 issued
+RFCs plus 189 not-issued numbers, annotated; 9,856 full texts; 96,168 reference
+edges; 6,888 implementation links across 88 projects; audited snapshot
+2026-11-18, sha256 `9ecd7946…`).
 
-The coordinate space holds the absolute dependency graph. RFC Box generates an arbitrary dependency graph from it: given a snapshot of the RFCs and a user's specific requirements (which standards they care about), it returns the subset slice of all the standards that matter; from that slice it computes all the libraries and all the program services needed to work with code that meets those standards; and where there are gaps, it provides requirements to synthesize the missing program. Those gap requirements come back as build requests (ticketing: tasks.phext 25.8.12/11.7.14/6.7.9).
+The crate is useful the moment it installs: a small audited **baseline core**
+of common web-development RFCs rides inside it, and every other RFC is
+represented by a **discovery stub** (our generated summary + its top-50
+signature words), so search runs corpus-wide with no fetch at all.
 
-Program task: tasks.phext **34.5.9/7.6.10/6.5.9** · Data task: **25.6.9/8.6.10/6.6.9** (ietf.phext One Day Build, 2026-11-18)
+## Licensing — split by construction
 
-## The data model (ietf.phext, 2026-11-18)
+- **Our code is ours: MIT** (see `LICENSE`). The builder, reader, graph
+  machinery, and fetch machinery are Phext's work product.
+- **The RFC texts are not ours and are never relicensed.** Copyright in the
+  RFCs sits with their original authors (or their employers); the texts
+  travel under IETF terms wherever this crate carries, fetches, or emits
+  them. No crate artifact presents the texts as MIT-licensed, and the
+  crate's license field does not cover them.
 
-- 10,052 records — every RFC (9,863 issued + 189 not-issued numbers, annotated), MOAT-ruled: one status, one basis, evidence pointers per entry; superseded RFCs (1,385) kept in full, annotated, redirected — never pruned.
-- Dependency edges in the coordinate space: index edges (obsoletes / obsoleted-by / updates / updated-by), reference edges extracted from each RFC's own References section, and implementation edges to the canonical open-source implementation per standard (6,888 links, 88 projects; Tier 1 complete) — the resolution step: name standards (e.g. S/MIME + TLS + AES-256) → canonical code → compose with phcc → a working baseline under business logic.
-- Access: SQ on logos-prime, `http://100.107.204.62:1338/api/v2`, tenant `p=ietf`, API key required (obtain from Watch/Orion). Mirror: free-fall `~/ietf-mirror/`. Access guide: `docs/access.md` in this repo.
+> **TLP notice.** The RFC texts reproduced by this crate are IETF documents
+> distributed under the IETF Trust's Legal Provisions (TLP); in February 2026
+> the Trust's role and copyrights passed to the IETF IPMC, carrying the same
+> terms. Outside the IETF standards process, the TLP licenses copying and
+> distribution of RFCs **in full and without modification**; this crate
+> therefore carries, fetches, and emits texts byte-for-byte as published by
+> the RFC Editor, verifies each against its recorded SHA-256 before serving
+> it, and refuses — loudly — on mismatch. Code components extracted from
+> RFCs (ABNF, MIB modules, sample code) ride TLP §4's Revised BSD License,
+> except for RFCs bearing §6.c restrictive legends, whose code is not
+> BSD-available; the crate's manifest records each text's legend class.
 
-## Standing caveat
+This crate is a **third-party structure over IETF material**. It is not an
+IETF or RFC Editor product, and nothing in it is an IETF designation.
+"Canonical implementation" in the corpus is a curation judgment recorded
+with its basis, never an IETF designation.
 
-Reference edges for RFCs ≥ ~8800 are **not authoritative** until the RFCXML-v3 extraction fix lands and the graph leg is re-audited (Judge, PH: Judgement): the v3-era extractor silently under-extracted under a "parsed" label in the first build. Index edges and implementation edges in that range are unaffected. Slice computations must treat that range's reference edges as absent, not as truth.
+## Good-netizen defaults (have teeth)
 
-## Documents
+- The baseline set is a small core, audited and included in the crate.
+  `sync` / `add` / `remove` work on the **target project's** declared set.
+- The whole corpus is fetched **only** when you explicitly specify a
+  package location for it. No default path does it.
+- All fetching is rate-limited **in the fetch path itself** to human
+  fetching speed: sequential, human-scale spacing, no parallel floods, no
+  retry storms. A 429 or bot wall ends the run. The crate **cannot be
+  configured to fetch faster** — there is no such setting.
 
-- `docs/access.md` — how every platform consumes ietf.phext (Reed, PH: Revenue)
-- `docs/audit/` — MOAT conformance audit plan + verdict (Judge, PH: Judgement)
-- `docs/verification/` — independent integrity evidence + hosting record (Watch, PH: DevSecOps)
-- `docs/fleet-mirror.md` — fleet truth + mirror record (Rogue, PH: Evolution)
+## The declared set: `rfcs.json`
+
+The target project (the project consuming RFCs — *not* rfcbox itself)
+declares its set in `rfcs.json` at its root: per RFC, its number, the
+SHA-256 of the text as fetched, its source, and its supersession state
+(successor named, never silently swapped). `rfcs.json` is the source of
+truth; the texts on disk are its verified materialization.
+
+```console
+$ rfcbox init                 # start rfcs.json from the baseline core
+$ rfcbox add 6455             # declare + fetch the WebSocket RFC
+$ rfcbox add 9110 --closure --depth 1 --kinds normative
+$ rfcbox remove 6265
+$ rfcbox sync                 # annotate supersessions, materialize the declared
+$ rfcbox scan                 # document which RFCs the project actually uses
+$ rfcbox audit                # verify: materialized? hash-verified? status? + legend receipts
+```
+
+## Search — the front door to `add`
+
+```console
+$ rfcbox search cache-control max-age        # keyword, over the set on disk + stubs
+$ rfcbox search --intent "how should a client handle a stale cached response"
+```
+
+Intent search ranks candidates from the corpus's own structure — keyword
+evidence, the reference graph, and the implementation graph — and **every
+result carries its why**. A ranking is a ranking, never a verdict; thin
+signals are stated plainly. Search never fetches and never adds anything
+by itself.
+
+## Waterfall commands
+
+`baseline <name>` freezes the declared set as an immutable phase-gate
+artifact; `diff` calculates the change record between gates; `freeze` /
+`thaw` put the set under change control (sync reports notices, applies
+nothing; add/remove refuse); `verify` is the verification-phase audit;
+`export` emits the reviewer package (traceability matrix, declaration,
+baseline, latest verify report).
+
+## Corpus features
+
+`subset 9110 --depth 1 --out ./slice` produces a self-contained,
+byte-for-byte reproducible slice (texts verbatim, per-text hashes, the
+edge set among members, a provenance manifest). `refresh --corpus
+ietf.phext` discovers RFCs published after the snapshot, fetches them
+verbatim at human speed, and appends them as scrolls to a **candidate**
+snapshot — the audited artifact is never edited in place.
+
+## Maintainers
+
+`rfcbox-build --phext ietf.phext --source ietf-source.json --out .`
+regenerates the shipped payloads (`assets/`): it runs the per-RFC legend
+audit across every issued text, computes the signature words, builds the
+discovery stubs under their size budget (an overrun fails the build),
+and writes the manifest with full payload receipts.
