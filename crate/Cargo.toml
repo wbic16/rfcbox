@@ -1,0 +1,38 @@
+[package]
+name = "rfcbox"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "rfcbox — a Rust builder/reader library and CLI over ietf.phext, the phext corpus of IETF RFCs. Our code is MIT; the RFC texts carried by this crate are IETF/author material under IETF Trust (now IETF IPMC) Legal Provisions terms and are never relicensed — see README.md and the TLP notice in the docs."
+readme = "README.md"
+include = [
+    "src/**",
+    "assets/manifest.json",
+    "assets/core.xz",
+    "assets/index.xz",
+    "README.md",
+    "LICENSE",
+]
+
+[lib]
+name = "rfcbox"
+path = "src/lib.rs"
+
+[[bin]]
+name = "rfcbox"
+path = "src/bin/rfcbox.rs"
+
+[[bin]]
+name = "rfcbox-build"
+path = "src/bin/rfcbox-build.rs"
+
+[dependencies]
+libphext = "0.6"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+xz2 = "0.1"
+ureq = { version = "2", features = ["tls"] }
+
+[profile.release]
+opt-level = 3
